@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="读书摘要,《图解TCP/IP》竹下隆史,未完待续," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="协议是什么？一句话简述：协议是计算机之间实现通信所定义的规则，计算机之间按照这种事先达成的约定实现通信。 例：计算机网络体系结构    网络体系结构 包含协议 主要用途     TCP/IP IP、ICMP、TCP、UDP、HTTP、TELNET、SNMP、SMTP… 互联网、局域网   IPX/SPX（NetWare">
+<meta name="keywords" content="读书摘要,《图解TCP&#x2F;IP》竹下隆史,未完待续">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议简述">
+<meta property="og:url" content="http://yoursite.com/2016/12/20/网络协议简述/index.html">
+<meta property="og:site_name" content="闰土的小黑屋">
+<meta property="og:description" content="协议是什么？一句话简述：协议是计算机之间实现通信所定义的规则，计算机之间按照这种事先达成的约定实现通信。 例：计算机网络体系结构    网络体系结构 包含协议 主要用途     TCP/IP IP、ICMP、TCP、UDP、HTTP、TELNET、SNMP、SMTP… 互联网、局域网   IPX/SPX（NetWare） IPX、SPX、NPC… 个人电脑局域网   AppleTalk DDP、R">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-17T02:12:59.004Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议简述">
+<meta name="twitter:description" content="协议是什么？一句话简述：协议是计算机之间实现通信所定义的规则，计算机之间按照这种事先达成的约定实现通信。 例：计算机网络体系结构    网络体系结构 包含协议 主要用途     TCP/IP IP、ICMP、TCP、UDP、HTTP、TELNET、SNMP、SMTP… 互联网、局域网   IPX/SPX（NetWare） IPX、SPX、NPC… 个人电脑局域网   AppleTalk DDP、R">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/20/网络协议简述/"/>
+
+
+
+
+
+  <title>网络协议简述 | 闰土的小黑屋</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">闰土的小黑屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/20/网络协议简述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Runtu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闰土的小黑屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">网络协议简述</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-20T13:54:07+08:00">
+                2016-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="协议是什么？"><a href="#协议是什么？" class="headerlink" title="协议是什么？"></a>协议是什么？</h2><p>一句话简述：协议是计算机之间实现通信所定义的规则，计算机之间按照这种事先达成的约定实现通信。</p>
+<p>例：计算机网络体系结构</p>
+<table>
+<thead>
+<tr>
+<th>网络体系结构</th>
+<th>包含协议</th>
+<th>主要用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP/IP</td>
+<td>IP、ICMP、TCP、UDP、HTTP、TELNET、SNMP、SMTP…</td>
+<td>互联网、局域网</td>
+</tr>
+<tr>
+<td>IPX/SPX（NetWare）</td>
+<td>IPX、SPX、NPC…</td>
+<td>个人电脑局域网</td>
+</tr>
+<tr>
+<td>AppleTalk</td>
+<td>DDP、RTMP、AEP、ATP、ZIP…</td>
+<td>苹果公司现有产品的局域网</td>
+</tr>
+<tr>
+<td>DECnet</td>
+<td>DPR、NSP、SCP…</td>
+<td>前DEC小型机</td>
+</tr>
+</tbody>
+</table>
+<p>协议有很多种，每一种协议都明确的界定了它的行为规范，协议规定了使用某种媒介进行通讯的具体方式和通讯过程中遇到异常的处理方式。</p>
+<p>计算机之间的协议的实现一般使用分组交换的方式。</p>
+<a id="more"></a>
+<hr>
+<h2 id="分组交换是什么？"><a href="#分组交换是什么？" class="headerlink" title="分组交换是什么？"></a>分组交换是什么？</h2><p>分组交换是指将大数据分为一个个叫做包的较小单位进行传输的方法。分组交换的灵感是来源于生活中邮寄包裹的行为。我们在邮寄包裹的时候需要提交寄件人地址、收件人地址等信息；同样的，在通信过程中，也会为每个包附上源主机地址、目标主机地址、分组序号等信息放到分包数据的前端、称为“报文首部”。</p>
+<p>通信协议会规定报文首部应该写入那些信息、应该如何处理这些信息，接收端主机同样根据这个协议复原数据。</p>
+<hr>
+<h2 id="协议由谁制定？"><a href="#协议由谁制定？" class="headerlink" title="协议由谁制定？"></a>协议由谁制定？</h2><p>协议的诞生和标准化一开始并没有得到重视，之后由于计算机之间的通信的需求，各家计算机厂商开始研发他们自己的网络产品和网络系统来实现计算机通信。各个厂商之间的使用的网络产品并不相同，所以它们的计算机之间无法实现通信。</p>
+<p>为了实现异构计算机之间的通信，ISO制订了一个国际标准OSI，对通信系统进行了标准化。虽然OSI协议并没有得到普及，但是OSI参考模型在网络协议的制定中发挥了很大的作用。</p>
+<p>现在流行使用的TCP/IP体系是由IETF所制定的，以当时的大学等研究机构和计算机行业作为中心力量，推进了TCP/IP的标准化进程。使之成为了互联网通信的标准和相关的生产行业所应用的标准。</p>
+<hr>
+<h2 id="协议的分层思路"><a href="#协议的分层思路" class="headerlink" title="协议的分层思路"></a>协议的分层思路</h2><p>协议的分层是指将计算机之间的通信行为以功能为角度进行层次划分，例如OSI参考模型将通信协议的必要功能分为了7层，能够使一些复杂的协议简单化。在OSI模型中，每个分层都接收它下一层所提供的特定服务，并负责为它的上一层提供特定服务，上下层之间进行交互时所遵循的约定叫做“接口”，同一层之间交互时遵循的约定叫做“协议”。</p>
+<p>OSI参考模型是一个理想化的模型，将网络功能划分为七层。这样的好处是各层独立使用，即使某层出现问题也不会波及整个系统，通过细分通信功能，使各层各司其职，每个分层的协议易于实现，灵活性和扩展性都很强。不过分层太细的缺点也是明显的，那就是过分模块化，每个分层共同执行的重复操作占据大量的资源等。</p>
+<p>下面通过一个简单的情景模拟来理解分层思路，有两位同学A君和B君，他们通过手机进行通话，那么A君B君也就是人类就是第一层，手机可以笼统的划分为第二层。A君B君使用手机提供的拨号程序和话筒（接口）来使用手机提供的服务，而A君B君之间通话使用的语言和语法就是他们之间通信使用的协议。同样的，手机之间将语音信息和电子信息进行转换的规则就是他们之间使用的协议。</p>
+<hr>
+<h2 id="OSI参考模型"><a href="#OSI参考模型" class="headerlink" title="OSI参考模型"></a>OSI参考模型</h2><table>
+<thead>
+<tr>
+<th>分层名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用层</td>
+<td>针对特定应用的协议</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>设备固有数据格式和网络标准数据格式的转换</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>通信管理，负责决定何时建立和断开通信连接</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>管理两个节点（互联的网络终端）之间的通信传输。负责保证可靠传输（确保数据能够可靠的传送到目标地址）</td>
+</tr>
+<tr>
+<td>网路层</td>
+<td>地址管理和路由选择</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>互联设备之间传送和识别数据帧</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>以“0”和“1”代表电压的高低、灯光的闪灭。界定连接器和网线的规格。</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/读书摘要/" rel="tag"># 读书摘要</a>
+          
+            <a href="/tags/《图解TCP-IP》竹下隆史/" rel="tag"># 《图解TCP/IP》竹下隆史</a>
+          
+            <a href="/tags/未完待续/" rel="tag"># 未完待续</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/23/计算机与网络发展的历史概述/" rel="next" title="计算机与网络发展的历史概述">
+                <i class="fa fa-chevron-left"></i> 计算机与网络发展的历史概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/29/浏览器工作原理/" rel="prev" title="浏览器工作原理">
+                浏览器工作原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png"
+                alt="Runtu" />
+            
+              <p class="site-author-name" itemprop="name">Runtu</p>
+              <p class="site-description motion-element" itemprop="description">闰土就是我啦，这里是我记录日常开发和生活一些博文的地方</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Runtu4378" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协议是什么？"><span class="nav-number">1.</span> <span class="nav-text">协议是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组交换是什么？"><span class="nav-number">2.</span> <span class="nav-text">分组交换是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协议由谁制定？"><span class="nav-number">3.</span> <span class="nav-text">协议由谁制定？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协议的分层思路"><span class="nav-number">4.</span> <span class="nav-text">协议的分层思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OSI参考模型"><span class="nav-number">5.</span> <span class="nav-text">OSI参考模型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Runtu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=58881184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

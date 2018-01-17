@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="未完待续,前端,React,Redux,Webpack,Express," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="文章来源:es6环境搭建Webpack傻瓜指南（三）和React配合开发">
+<meta name="keywords" content="未完待续,前端,React,Redux,Webpack,Express">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React+Redux+webpack+Express应用环境搭建实战">
+<meta property="og:url" content="http://yoursite.com/2017/02/16/React-Redux-webpack-Express应用环境搭建实战/index.html">
+<meta property="og:site_name" content="闰土的小黑屋">
+<meta property="og:description" content="文章来源:es6环境搭建Webpack傻瓜指南（三）和React配合开发">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-17T02:12:59.029Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React+Redux+webpack+Express应用环境搭建实战">
+<meta name="twitter:description" content="文章来源:es6环境搭建Webpack傻瓜指南（三）和React配合开发">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/16/React-Redux-webpack-Express应用环境搭建实战/"/>
+
+
+
+
+
+  <title>React+Redux+webpack+Express应用环境搭建实战 | 闰土的小黑屋</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">闰土的小黑屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/16/React-Redux-webpack-Express应用环境搭建实战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Runtu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闰土的小黑屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React+Redux+webpack+Express应用环境搭建实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-16T10:19:22+08:00">
+                2017-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>文章来源:<br><a href="http://es6.ruanyifeng.com/#docs/intro" target="_blank" rel="noopener">es6环境搭建</a><br><a href="https://zhuanlan.zhihu.com/p/20522487?columnSlug=FrontendMagazine" target="_blank" rel="noopener">Webpack傻瓜指南（三）和React配合开发</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="本文目的"><a href="#本文目的" class="headerlink" title="本文目的"></a>本文目的</h2><p>使用webpack对项目工程进行打包监听，实现文件模块化打包、项目文件变动自动更新页面，生成本地服务器进行页面显示和调试。</p>
+<p>进阶部分补充如何将Webpack自动更新页面和后台数据处理Express结合进行全栈开发。</p>
+<hr>
+<h2 id="配置流程"><a href="#配置流程" class="headerlink" title="配置流程"></a>配置流程</h2><h3 id="生成项目目录"><a href="#生成项目目录" class="headerlink" title="生成项目目录"></a>生成项目目录</h3><p>项目目录结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┍client(项目源文件目录)</span><br><span class="line">┃ ┝actions（action文件目录）</span><br><span class="line">┃ ┝components（UI组件文件目录）</span><br><span class="line">┃ ┝containers（容器组件文件目录）</span><br><span class="line">┃ ┝utils（公用资源模块目录）</span><br><span class="line">┃ ┝reducers（reducer文件目录）</span><br><span class="line">┃ ┕index.jsx（项目入口）</span><br><span class="line">┝build（编译文件存放目录，可不创建）</span><br><span class="line">┝node_modules（模块仓库）</span><br><span class="line">┝.babelrc（babel配置文件）</span><br><span class="line">┝package.json（项目描述文件）</span><br><span class="line">┕webpack.config.js（webpack配置文件）</span><br></pre></td></tr></table></figure>
+<p>创建文件夹，命令行输入指令 <code>npm init</code> 生成项目描述文件，一路回车，然后便生成了 <code>package.json</code> 文件。随后建立 app 目录及 components 目录、utils 目录。</p>
+<h3 id="安装webpack及配置"><a href="#安装webpack及配置" class="headerlink" title="安装webpack及配置"></a>安装webpack及配置</h3><p>输入指令 <code>npm install --save-dev webpack html-webpack-plugin</code> 安装 webpack 及插件，然后在根目录新建 <code>webpack.config.js</code> 文件，输入以下内容保存。</p>
+<p>输入指令 <code>webpack-dev-server -v</code>，如无显示对应版本信息的话需要全局安装 webpack 的开发工具，指令为 <code>npm install -g webpack-dev-server</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">var</span> HtmlwebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">var</span> ROOT_PATH = path.resolve(__dirname);</span><br><span class="line"><span class="keyword">var</span> APP_PATH = path.resolve(ROOT_PATH, <span class="string">'client'</span>);</span><br><span class="line"><span class="keyword">var</span> BUILD_PATH = path.resolve(ROOT_PATH, <span class="string">'build'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports= &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    client: path.resolve(APP_PATH, <span class="string">'index.jsx'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: BUILD_PATH,</span><br><span class="line">    filename: <span class="string">'bundle.js'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//enable dev source map</span></span><br><span class="line">  devtool: <span class="string">'eval-source-map'</span>,</span><br><span class="line">  <span class="comment">//enable dev server</span></span><br><span class="line">  devServer: &#123;</span><br><span class="line">    contentBase: APP_PATH,</span><br><span class="line">    compress: <span class="literal">true</span>,</span><br><span class="line">    port: <span class="number">9000</span>,</span><br><span class="line">    hot: <span class="literal">true</span>,</span><br><span class="line">    watchContentBase: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//babel重要的loader在这里</span></span><br><span class="line">  <span class="built_in">module</span>: &#123;&#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    extensions: [<span class="string">'.js'</span>, <span class="string">'.jsx'</span>, <span class="string">".scss"</span>, <span class="string">".less"</span>],</span><br><span class="line">    alias: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlwebpackPlugin(&#123;</span><br><span class="line">      title: <span class="string">'My first react app'</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上配置将 app 目录下的 <code>index.jsx</code> 设置为入口文件文件，设置根目录下的 build 目录设置为打包文件输出目录（使用 <code>build</code> 命令时才会生成文件，平时预览的时候编译的 <code>bundle.js</code> 文件是在内存中的）。然后还定义了 dev 工具运行的目录为 app 目录（默认入口文件为 <code>index.jsx</code>）当运行 <code>webpack-dev-server</code> 命令的时候会启动本地服务器的 9000 接口进行页面输出。</p>
+<p><code>resolve</code> 选项的 <code>extensions</code> 配置为常用文件后缀，进行设置之后引入这些类型的文件可以不输入后缀名。<code>alias</code> 配置项为对常用路径设置别名，这样有助于减少系统检索的时间。如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置前</span></span><br><span class="line"><span class="keyword">import</span> bootstraps <span class="keyword">from</span> <span class="string">'../node_modules/bootstrap/less/bootstrap.less'</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置项为</span></span><br><span class="line">alias: &#123;</span><br><span class="line">  <span class="string">"Bootstrap"</span>: path.resolve(__dirname, <span class="string">'node_modules/bootstrap/less/bootstrap.less'</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 设置后可以这样子引入</span></span><br><span class="line"><span class="keyword">import</span> bootstrap <span class="keyword">from</span> <span class="string">'Bootstrap'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="安装React-Redux并配置"><a href="#安装React-Redux并配置" class="headerlink" title="安装React+Redux并配置"></a>安装React+Redux并配置</h3><p>输入命令 <code>npm install --save-dev react react-dom react-redux redux</code>，安装 react 和 redux。</p>
+<p>由于 react 和 redux 会用到 es6 的语法，所以需要安装 babel 相关插件负责在打包的时候将其转换为 es5 的语法。</p>
+<p>输入命令 <code>npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-stage-2 babel-preset-react</code> 安装相关插件。</p>
+<p>然后在项目根目录建立 <code>.babelrc</code> 作为 babel 的配置文件，window 用户可在命令行中输入命令 <code>cd .&gt;.babelrc</code> 创建这样一个不带文件名的文件。在 <code>.babelrc</code> 文件中输入以下内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  &quot;presets&quot;: [</span><br><span class="line">    &quot;es2015&quot;,</span><br><span class="line">    &quot;react&quot;,</span><br><span class="line">    &quot;stage-2&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;plugins&quot;: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>之后还需在 <code>webpack.config.js</code> 文件中修改 module 配置项，添加 <code>loaders</code> 属性，使其支持渲染 .jsx 为后缀的使用 es6 语法的文件。修改结果如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">//babel重要的loader在这里</span></span><br><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">  loaders: [</span><br><span class="line">    &#123;</span><br><span class="line">      test: <span class="regexp">/\.jsx?$/</span>,</span><br><span class="line">      loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">      include: APP_PATH      </span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;,</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>其目的是使用 babel-loader 插件对后缀为 jsx 的文件进行语法转换和渲染。</p>
+<h3 id="webpack对其他格式的文件的渲染配置"><a href="#webpack对其他格式的文件的渲染配置" class="headerlink" title="webpack对其他格式的文件的渲染配置"></a>webpack对其他格式的文件的渲染配置</h3><p>项目中常会用到的文件类型还有 .less|.sass 的样式脚本文件、.eot|.ttf 之类的 iconfont 文件和图片文件。下面对 webpack 进行配置，使之支持。</p>
+<p>输入命令 <code>npm install --save-dev file-loader url-loader css-loader style-loader</code> 安装对应插件。</p>
+<p>由于我使用 less 对我的 css 文件进行管理，所以我额外安装了 <code>less less-loader node-less</code> 选用 sass 的可以安装 <code>sass sass-loader node-sass</code> 插件。</p>
+<p>然后修改webpack.config.js中的module配置项下面的loaders属性，修改结果如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">//babel重要的loader在这里</span></span><br><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">  loaders: [</span><br><span class="line">    &#123;</span><br><span class="line">      test: <span class="regexp">/\.jsx?$/</span>,</span><br><span class="line">      loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">      include: APP_PATH      </span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      test: <span class="regexp">/\.scss?$/</span>,</span><br><span class="line">      loaders: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      test: <span class="regexp">/\.less?$/</span>,</span><br><span class="line">      loaders: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'less-loader'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      test: <span class="regexp">/\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/</span>, </span><br><span class="line">      loader: <span class="string">'url-loader?limit=50000&amp;name=[path][name].[ext]'</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;,</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>在 app 目录下的 <code>index.jsx</code> 文件中添加如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">let</span> normalVal = <span class="number">0</span></span><br><span class="line"><span class="keyword">let</span> counter = <span class="function">(<span class="params">state = normalVal, action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'ADD'</span>:</span><br><span class="line">      <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'DOWN'</span>:</span><br><span class="line">      <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> store = createStore(counter);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="comment">//JSX here!</span></span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">          &lt;div className=<span class="string">"container"</span>&gt;</span><br><span class="line">            &lt;section className=<span class="string">"jumbotron"</span>&gt;</span><br><span class="line">              &lt;h3 className=<span class="string">"jumbotron-heading"</span>&gt;React+Redux+webpack&lt;<span class="regexp">/h3&gt;</span></span><br><span class="line"><span class="regexp">              &lt;div&gt;&#123;store.getState()&#125;&lt;/</span>div&gt;</span><br><span class="line">              &lt;button onClick=&#123;() =&gt; store.dispatch(&#123;<span class="attr">type</span>:<span class="string">'ADD'</span>&#125;)&#125;&gt;+&lt;/button&gt;</span><br><span class="line">              &lt;button onClick=&#123;() =&gt; store.dispatch(&#123;<span class="attr">type</span>:<span class="string">'DOWN'</span>&#125;)&#125;&gt;-&lt;/button&gt;</span><br><span class="line">            &lt;<span class="regexp">/section&gt;</span></span><br><span class="line"><span class="regexp">          &lt;/</span>div&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> app = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(app);</span><br><span class="line">ReactDOM.render(&lt;App /&gt;, app);</span><br><span class="line">store.subscribe(() =&gt; ReactDOM.render(&lt;App /&gt;, app))</span><br></pre></td></tr></table></figure>
+<p>可以选用为 react 定制的 bootstrap 模块，<code>npm install --save react-bootstrap</code> 使用方式参考这两篇文章 <a href="http://blog.csdn.net/github_26672553/article/details/52141457" target="_blank" rel="noopener">React-BootStrap 框架快速体验上手</a>，<a href="https://react-bootstrap.github.io/components.html" target="_blank" rel="noopener">官方文档</a>。</p>
+<p>修改 <code>package.json</code> 中的 <code>script</code> 选项，将其修改为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">  <span class="string">"dev"</span>: <span class="string">"webpack-dev-server --progress --profile --colors --hot"</span>,</span><br><span class="line">  <span class="string">"build"</span>: <span class="string">"webpack --progress --profile --colors"</span>,</span><br><span class="line">  <span class="string">"test"</span>: <span class="string">"karma start"</span></span><br><span class="line">&#125;,</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>然后子啊命令行中输入命令 <code>npm run dev</code>，编译成功无报错的话打开浏览器，输入地址 <code>http://127.0.0.1:9000</code> 查看效果。</p>
+<hr>
+<h2 id="安装并配置Express"><a href="#安装并配置Express" class="headerlink" title="安装并配置Express"></a>安装并配置Express</h2><p>Express 是基于 Node.js 的后台框架，我选择使用它来作为后端框架的原因是我不会用其他方式。</p>
+<p>具体的介绍不多说，这里是中文官网链接。</p>
+<p>运行命令 <code>npm install --save-dev express</code> 即可安装 Express。</p>
+<p>现在我们来调整一下上面建立的文件目录结构，增加一个后台入口和后台文件存放目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">┍client（项目源文件目录）</span><br><span class="line">┃ ┝actions（action文件目录）</span><br><span class="line">┃ ┝components（UI组件文件目录）</span><br><span class="line">┃ ┝containers（容器组件文件目录）</span><br><span class="line">┃ ┝utils（公用资源模块目录）</span><br><span class="line">┃ ┝reducers（reducer文件目录）</span><br><span class="line">┃ ┕view（对应后台的view视图文件的入口文件存放目录）</span><br><span class="line">┃   ┝index1.jsx（view1入口文件）</span><br><span class="line">┃   ┕index2.jsx（view2入口文件）</span><br><span class="line">┝server（服务器文件目录）</span><br><span class="line">┃ ┝views（view文件存放目录）</span><br><span class="line">┃ ┕routes（route文件存放目录）</span><br><span class="line">┝build（编译文件存放目录，可不创建）</span><br><span class="line">┝node_modules（模块仓库）</span><br><span class="line">┝app.js（后台入口文件）</span><br><span class="line">┝.babelrc（babel配置文件）</span><br><span class="line">┝package.json（项目描述文件）</span><br><span class="line">┕webpack.config.js（webpack配置文件）</span><br></pre></td></tr></table></figure>
+<p>以上目录结构便是调整后的样子。目录文件依次建立好之后，在根目录的 <code>app.js</code> 文件中键入如下内容。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line">app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'Hello World!'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> server = app.listen(<span class="number">3000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> port = server.address().port;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Example app listening at Port %s'</span>, port);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>然后在命令行中输入指令 <code>node app.js</code> 当命令行输出 <code>Example app listening at Port 3000</code> 的时候，在浏览器中输入地址，如果能够在浏览器看到 <code>Hello World!</code>，那就代表 Express 环境搭好了。</p>
+<hr>
+<h2 id="Express结合Webpack的全栈自动刷新"><a href="#Express结合Webpack的全栈自动刷新" class="headerlink" title="Express结合Webpack的全栈自动刷新"></a>Express结合Webpack的全栈自动刷新</h2><blockquote>
+<p>文章来源<br><a href="http://acgtofe.com/posts/2016/02/full-live-reload-for-express-with-webpack" target="_blank" rel="noopener">Express结合Webpack的全栈自动刷新</a><br><a href="https://segmentfault.com/a/1190000006178770#articleHeader6" target="_blank" rel="noopener">入门 Webpack，看这篇就够了</a></p>
+</blockquote>
+<p>Redux+React 实现的 flux 前端框架（下文统称前端框架）实现了对状态的自洽管理和页面更新生成。但是作为传统的 C/S 结构，我们还需要安全封闭的后台环境来实现对核心逻辑的封装和数据库的保存。前端框架通过 post 接口向后台调用需要更新的数据，然后通过客户端的缓存文件实现页面更新和显示。</p>
+<p>那么，在单人开发的时候，前端框架的本地服务器预览和后台的本地服务器模拟实现交接要如何做到呢，这里来整理一下。</p>
+<p>前端框架的预览使用的是 <code>webpack-dev-server</code> 插件，该插件其实是使用了 express 生成了一个小型的本地页面来实行页面显示。我们只需要通过后台端的 express 启动文件中启动 <code>webpack-dev-middleware</code> 和 <code>webpack-hot-middleware</code> 这两个插件来替代 <code>webpack-dev-server</code> 的功能就可以了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev webpack-dev-middleware webpack-hot-middleware</span><br></pre></td></tr></table></figure>
+<p>安装完毕之后我们可以直接使用上面为 <code>webpack-dev-server</code> 所使用的设置文件生成一份副本 <code>webpack.config.dev.js</code> 来作为 <code>webpack-dev-middleware</code> 的配置文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.dev.js</span></span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">var</span> HtmlwebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">var</span> ROOT_PATH = path.resolve(__dirname);</span><br><span class="line"><span class="keyword">var</span> APP_PATH = path.resolve(ROOT_PATH, <span class="string">'client'</span>);</span><br><span class="line"><span class="keyword">var</span> Mod_PATH = path.resolve(ROOT_PATH, <span class="string">'node_modules'</span>);</span><br><span class="line"><span class="keyword">var</span> publicPath = <span class="string">'http://localhost:3000/'</span>;</span><br><span class="line"><span class="keyword">var</span> hotMiddlewareScript = <span class="string">'webpack-hot-middleware/client?reload=true'</span>;</span><br><span class="line"><span class="keyword">var</span> devConfig = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">        page1: [<span class="string">'./client/views/index1'</span>, hotMiddlewareScript],</span><br><span class="line">        page2: [<span class="string">'./client/views/index2'</span>, hotMiddlewareScript]</span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        filename: <span class="string">'./[name]/bundle.js'</span>,</span><br><span class="line">        path: path.resolve(<span class="string">'./public'</span>),</span><br><span class="line">        publicPath: publicPath,</span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'source-map'</span>,</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        loaders: [</span><br><span class="line">        &#123;</span><br><span class="line">          test: <span class="regexp">/\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/</span>, </span><br><span class="line">          loader: <span class="string">'url-loader?limit=50000&amp;name=[path][name].[ext]'</span></span><br><span class="line">        &#125;, &#123;</span><br><span class="line">          test: <span class="regexp">/\.(js|jsx)$/</span>,</span><br><span class="line">          loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">          include: APP_PATH      </span><br><span class="line">        &#125;,&#123;</span><br><span class="line">          test: <span class="regexp">/\.css?$/</span>,</span><br><span class="line">          loaders: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]</span><br><span class="line">        &#125;,&#123;</span><br><span class="line">          test: <span class="regexp">/\.less?$/</span>,</span><br><span class="line">          loaders: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'less-loader'</span>]</span><br><span class="line">        &#125;,]</span><br><span class="line">    &#125;,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      extensions: [<span class="string">'.js'</span>, <span class="string">'.jsx'</span>, <span class="string">".scss"</span>, <span class="string">".less"</span>],</span><br><span class="line">      <span class="comment">// 设置常用模块别名，优化webpack检索时间</span></span><br><span class="line">      alias: &#123;</span><br><span class="line">        <span class="comment">// 'jquery': 'client/utils/javascript/jquery-3.1.1.min.js',</span></span><br><span class="line">        <span class="string">'react'</span>: path.join(Mod_PATH, <span class="string">'react/dist/react.min.js'</span>),</span><br><span class="line">        <span class="string">'react-dom'</span>: path.join(Mod_PATH, <span class="string">'react-dom/dist/react-dom.min.js'</span>),</span><br><span class="line">        <span class="string">'react-redux'</span>: path.join(Mod_PATH, <span class="string">'react-redux/dist/react-redux.min.js'</span>),</span><br><span class="line">        <span class="string">'redux'</span>: path.join(Mod_PATH, <span class="string">'redux/dist/redux.min.js'</span>),</span><br><span class="line">        <span class="string">'react-bootstrap'</span>: path.join(Mod_PATH, <span class="string">'react-bootstrap/dist/react-bootstrap.min.js'</span>),</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="comment">// new webpack.OccurenceOrderPlugin(),</span></span><br><span class="line">        <span class="keyword">new</span> webpack.HotModuleReplacementPlugin(),</span><br><span class="line">        <span class="keyword">new</span> webpack.NoEmitOnErrorsPlugin(),</span><br><span class="line">        <span class="keyword">new</span> HtmlwebpackPlugin(&#123;</span><br><span class="line">          title: <span class="string">'My first react app'</span>,</span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">          $:<span class="string">"jquery"</span>,</span><br><span class="line">          jQuery:<span class="string">"jquery"</span>,</span><br><span class="line">          <span class="string">"window.jQuery"</span>:<span class="string">"jquery"</span></span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">module</span>.exports = devConfig;</span><br></pre></td></tr></table></figure>
+<p>要注意上面这份配置文件中的 devServer 配置项被去掉了，因为和预览服务器相关的属性设置被放到了中间件调用的参数当中去。</p>
+<p>和热启动有关的还有一个插件 <code>react-transform-hmr</code> 下面介绍安装及配置方法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev babel-plugin-react-transform react-transform-hmr</span><br></pre></td></tr></table></figure>
+<p>安装完毕之后配置 <code>.babelrc</code> 文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"presets"</span>: [<span class="string">"react"</span>, <span class="string">"es2015"</span>],</span><br><span class="line">  <span class="string">"env"</span>: &#123;</span><br><span class="line">    <span class="string">"development"</span>: &#123;</span><br><span class="line">    <span class="string">"plugins"</span>: [[<span class="string">"react-transform"</span>, &#123;</span><br><span class="line">       <span class="string">"transforms"</span>: [&#123;</span><br><span class="line">         <span class="string">"transform"</span>: <span class="string">"react-transform-hmr"</span>,</span><br><span class="line">         </span><br><span class="line">         <span class="string">"imports"</span>: [<span class="string">"react"</span>],</span><br><span class="line">         </span><br><span class="line">         <span class="string">"locals"</span>: [<span class="string">"module"</span>]</span><br><span class="line">       &#125;]</span><br><span class="line">     &#125;]]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在使用 React 的时候，可以热加载模块了。</p>
+<p>配置文件设置完成了之后就要到后台入口文件 <code>app.js</code> 中设置和中间件有关的代码了，不过要先安装模板引擎 <code>ejs npm install --save-dev ejs</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"><span class="keyword">var</span> bs = <span class="built_in">require</span>(<span class="string">'browser-sync'</span>).create();</span><br><span class="line"><span class="comment">//nodeJs模板引擎，选用ejs(需要安装)，如下配置才可正常使用.html文件作为view入口</span></span><br><span class="line">app.engine(<span class="string">'.html'</span>, <span class="built_in">require</span>(<span class="string">'ejs'</span>).__express);</span><br><span class="line"><span class="comment">//change the template main catelog</span></span><br><span class="line">app.set(<span class="string">'views'</span>,__dirname+<span class="string">'server/views/'</span>);</span><br><span class="line">app.set(<span class="string">'view engine'</span>,<span class="string">'html'</span>)</span><br><span class="line"><span class="comment">// 设置以开发模式启动项目</span></span><br><span class="line">app.locals.env = process.env.NODE_ENV || <span class="string">'dev'</span>;</span><br><span class="line">app.locals.reload = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> isDev = process.env.NODE_ENV !== <span class="string">'production'</span>;</span><br><span class="line"><span class="comment">// 检查当前是否以开发模式启动项目，若是的话，启用webpack中间件生成预览服务器</span></span><br><span class="line"><span class="keyword">if</span>(isDev)&#123;</span><br><span class="line">    <span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line">    <span class="keyword">const</span> webpackDevMiddleware = <span class="built_in">require</span>(<span class="string">'webpack-dev-middleware'</span>);</span><br><span class="line">    <span class="keyword">const</span> webpackHotMiddleware = <span class="built_in">require</span>(<span class="string">'webpack-hot-middleware'</span>);</span><br><span class="line">    <span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'./webpack.config.dev.js'</span>);</span><br><span class="line">    <span class="keyword">const</span> compiler=webpack(config);</span><br><span class="line">    app.use(webpackDevMiddleware(compiler,&#123;</span><br><span class="line">      publicPath:config.output.publicPath,</span><br><span class="line">      noInfo: <span class="literal">false</span>,</span><br><span class="line">      stats:&#123;</span><br><span class="line">        colors:<span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">    app.use(webpackHotMiddleware(compiler));</span><br><span class="line">    app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">      res.render(<span class="string">'./index.html'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    app.listen(<span class="number">3000</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"App (dev) is running on port 3000."</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>env.NODE_ENV</code> 是当前项目的运行环境参数，可通过命令行命令 <code>set NODE_ENV = development</code> 来设置，也可以在代码中通过 <code>app.locals.env = development</code> 来设置。上面代码的意思便是在开发模式中启动 webpack-dev 本地服务器进行本地预览，关于开发模式和上线模式之间的参数设置技巧可以看下这篇文章<a href="https://segmentfault.com/a/1190000006178770#articleHeader6" target="_blank" rel="noopener">入门 Webpack，看这篇就够了</a>。</p>
+<p>上面设置了在启动 Express 服务器的同时启动 webpack-dev 的本地预览服务器并实现在前端框架文件有改动的时候热启动重启插件或者刷新页面。</p>
+<p>下面来说说如何监听后台文件更改和自动刷新。常用的思路是 <code>supervisor</code> 或者 <code>browser-sync</code> 这里使用 <code>browser-sync</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev browser-sync</span><br></pre></td></tr></table></figure>
+<p>安装好插件之后，修改我们刚才的 app.js 文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"><span class="keyword">var</span> bs = <span class="built_in">require</span>(<span class="string">'browser-sync'</span>).create();</span><br><span class="line"><span class="comment">//nodeJs模板引擎，选用ejs(需要安装)，如下配置才可正常使用.html文件作为view入口</span></span><br><span class="line">app.engine(<span class="string">'.html'</span>, <span class="built_in">require</span>(<span class="string">'ejs'</span>).__express);</span><br><span class="line"><span class="comment">//change the template main catelog</span></span><br><span class="line">app.set(<span class="string">'views'</span>,__dirname+<span class="string">'server/views/'</span>);</span><br><span class="line">app.set(<span class="string">'view engine'</span>,<span class="string">'html'</span>)</span><br><span class="line"><span class="comment">// 设置以开发模式启动项目</span></span><br><span class="line">app.locals.env = process.env.NODE_ENV || <span class="string">'dev'</span>;</span><br><span class="line">app.locals.reload = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> isDev = process.env.NODE_ENV !== <span class="string">'production'</span>;</span><br><span class="line"><span class="comment">// 检查当前是否以开发模式启动项目，若是的话，启用webpack中间件生成预览服务器</span></span><br><span class="line"><span class="keyword">if</span>(isDev)&#123;</span><br><span class="line">    <span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line">    <span class="keyword">const</span> webpackDevMiddleware = <span class="built_in">require</span>(<span class="string">'webpack-dev-middleware'</span>);</span><br><span class="line">    <span class="keyword">const</span> webpackHotMiddleware = <span class="built_in">require</span>(<span class="string">'webpack-hot-middleware'</span>);</span><br><span class="line">    <span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'./webpack.config.dev.js'</span>);</span><br><span class="line">    <span class="keyword">const</span> compiler=webpack(config);</span><br><span class="line">    app.use(webpackDevMiddleware(compiler,&#123;</span><br><span class="line">      publicPath:config.output.publicPath,</span><br><span class="line">      noInfo: <span class="literal">false</span>,</span><br><span class="line">      stats:&#123;</span><br><span class="line">        colors:<span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">    app.use(webpackHotMiddleware(compiler));</span><br><span class="line">    app.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">      res.render(<span class="string">'./index.html'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    app.listen(<span class="number">3000</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        bs.init(&#123;</span><br><span class="line">          open: <span class="literal">false</span>,</span><br><span class="line">          ui: <span class="literal">false</span>,</span><br><span class="line">          notify: <span class="literal">false</span>,</span><br><span class="line">          proxy: <span class="string">'loaclhost:3000'</span>,</span><br><span class="line">          files: [<span class="string">'./client/**'</span>],</span><br><span class="line">          port: <span class="number">8080</span></span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"App (dev) is going to be running on port 8080 (by browsersync)."</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">"scripts": &#123;</span><br><span class="line">  "dev": "webpack-dev-server --progress --profile --colors --hot",</span><br><span class="line">  "build": "webpack --progress --profile --colors",</span><br><span class="line">  "test": "karma start",</span><br><span class="line">  "kaifa": "set NODE_ENV = development &amp;&amp; node app.js",</span><br><span class="line">  "pd": "set NODE_ENV = production &amp;&amp; node app.js"</span><br><span class="line">&#125;,</span><br><span class="line">...</span><br><span class="line">"devDependencies": &#123;</span><br><span class="line">  "babel-core": "^6.23.1",</span><br><span class="line">  "babel-loader": "^6.3.2",</span><br><span class="line">  "babel-plugin-react-transform": "^2.0.2",</span><br><span class="line">  "babel-preset-es2015": "^6.22.0",</span><br><span class="line">  "babel-preset-react": "^6.23.0",</span><br><span class="line">  "babel-preset-stage-2": "^6.22.0",</span><br><span class="line">  "browser-sync": "^2.18.8",</span><br><span class="line">  "css-loader": "^0.26.1",</span><br><span class="line">  "ejs": "^2.5.6",</span><br><span class="line">  "express": "^4.14.1",</span><br><span class="line">  "file-loader": "^0.10.0",</span><br><span class="line">  "html-webpack-plugin": "^2.28.0",</span><br><span class="line">  "jquery": "^3.1.1",</span><br><span class="line">  "less": "^2.7.2",</span><br><span class="line">  "less-loader": "^2.2.3",</span><br><span class="line">  "node-less": "^1.0.0",</span><br><span class="line">  "react": "^15.4.2",</span><br><span class="line">  "react-dom": "^15.4.2",</span><br><span class="line">  "react-redux": "^5.0.2",</span><br><span class="line">  "react-transform-hmr": "^1.0.4",</span><br><span class="line">  "redux": "^3.6.0",</span><br><span class="line">  "style-loader": "^0.13.1",</span><br><span class="line">  "url-loader": "^0.5.7",</span><br><span class="line">  "webpack": "^2.2.1",</span><br><span class="line">  "webpack-dev-middleware": "^1.10.1",</span><br><span class="line">  "webpack-hot-middleware": "^2.17.0"</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>最后贴出 <code>package.json</code> 里面的 <code>script</code> 配置和依赖列表，<code>dev</code> 命令为启动 webpack-dev-server 的本地预览服务器，<code>kaifa</code> 命令为启动 browser-sync 本地服务器。</p>
+<p>大概的流程便是这样，不过关于前后台结合的具体原理的流程我还有不理解的地方，慢慢会继续更新的。教程文档各有不同，框架接口也在不断更新调整，要多逼自己去看官方文档和亲手测试。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/未完待续/" rel="tag"># 未完待续</a>
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+            <a href="/tags/Redux/" rel="tag"># Redux</a>
+          
+            <a href="/tags/Webpack/" rel="tag"># Webpack</a>
+          
+            <a href="/tags/Express/" rel="tag"># Express</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/14/Webpack学习杂记/" rel="next" title="Webpack学习杂记">
+                <i class="fa fa-chevron-left"></i> Webpack学习杂记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/17/博客书写格式简要/" rel="prev" title="博客书写格式简要">
+                博客书写格式简要 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png"
+                alt="Runtu" />
+            
+              <p class="site-author-name" itemprop="name">Runtu</p>
+              <p class="site-description motion-element" itemprop="description">闰土就是我啦，这里是我记录日常开发和生活一些博文的地方</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Runtu4378" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本文目的"><span class="nav-number">1.</span> <span class="nav-text">本文目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置流程"><span class="nav-number">2.</span> <span class="nav-text">配置流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成项目目录"><span class="nav-number">2.1.</span> <span class="nav-text">生成项目目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装webpack及配置"><span class="nav-number">2.2.</span> <span class="nav-text">安装webpack及配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装React-Redux并配置"><span class="nav-number">2.3.</span> <span class="nav-text">安装React+Redux并配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack对其他格式的文件的渲染配置"><span class="nav-number">2.4.</span> <span class="nav-text">webpack对其他格式的文件的渲染配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装并配置Express"><span class="nav-number">4.</span> <span class="nav-text">安装并配置Express</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Express结合Webpack的全栈自动刷新"><span class="nav-number">5.</span> <span class="nav-text">Express结合Webpack的全栈自动刷新</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Runtu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=58881184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Jenkins,运维," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言记录一次利用虚拟机（两台）实现本地的 jenkins 环境搭建、PHP 代码运行环境搭建以及使用 jenkins 实现 PHP 代码的自动部署">
+<meta name="keywords" content="Jenkins,运维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用虚拟机实现 jenkins ＋ PHP 项目自动部署">
+<meta property="og:url" content="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/index.html">
+<meta property="og:site_name" content="闰土的小黑屋">
+<meta property="og:description" content="前言记录一次利用虚拟机（两台）实现本地的 jenkins 环境搭建、PHP 代码运行环境搭建以及使用 jenkins 实现 PHP 代码的自动部署">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/domin.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/Credentials.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/mission_settings.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/workspace.png">
+<meta property="og:updated_time" content="2018-01-17T02:12:59.047Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用虚拟机实现 jenkins ＋ PHP 项目自动部署">
+<meta name="twitter:description" content="前言记录一次利用虚拟机（两台）实现本地的 jenkins 环境搭建、PHP 代码运行环境搭建以及使用 jenkins 实现 PHP 代码的自动部署">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/domin.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/"/>
+
+
+
+
+
+  <title>利用虚拟机实现 jenkins ＋ PHP 项目自动部署 | 闰土的小黑屋</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">闰土的小黑屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Runtu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闰土的小黑屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用虚拟机实现 jenkins ＋ PHP 项目自动部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-12T10:17:36+08:00">
+                2018-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><strong>前言</strong><br>记录一次利用虚拟机（两台）实现本地的 jenkins 环境搭建、PHP 代码运行环境搭建以及使用 jenkins 实现 PHP 代码的自动部署</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>分为 jenkins 环境搭建和 PHP 环境搭建，jenkins 环境搭建在器一台虚拟机上面（虚拟机1），搭建过程详见：<a href="">Jenkins环境搭建</a></p>
+<p>下面简单说一下 PHP 环境的搭建，这里使用 <a href="https://oneinstack.com/" target="_blank" rel="noopener">OneinStack</a> 来进行搭建，具体方式详见 <a href="https://oneinstack.com/install/" target="_blank" rel="noopener">安装 - OneinStack</a></p>
+<h3 id="Git-安装"><a href="#Git-安装" class="headerlink" title="Git 安装"></a>Git 安装</h3><p>在虚拟机 1 中（安装 Jenkins 的机器）需要安装 git 才能够拉取代码</p>
+<p>这里笔者的虚拟机安装的是 CetOS 自带 git</p>
+<h3 id="python-环境搭建"><a href="#python-环境搭建" class="headerlink" title="python 环境搭建"></a>python 环境搭建</h3><p>因为自动部署代码有使用到 python 编写，所以同时也要安装 python 环境</p>
+<p>具体代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y gcc libffi-devel python-devel openssl-devel</span><br></pre></td></tr></table></figure>
+<p>接下来是 python 的 pip 环境安装、需要先行安装 epel-release</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release</span><br><span class="line">yum install -y python-pip</span><br></pre></td></tr></table></figure>
+<p>升级 pip</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip</span><br></pre></td></tr></table></figure>
+<h3 id="absible-安装"><a href="#absible-安装" class="headerlink" title="absible 安装"></a>absible 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y ansible</span><br></pre></td></tr></table></figure>
+<p>输入 <code>ansible --version</code> 能够获取到 ansible 版本号即为安装成功</p>
+<hr>
+<h2 id="自动部署思路"><a href="#自动部署思路" class="headerlink" title="自动部署思路"></a>自动部署思路</h2><p>自动部署包括机器管理、环境检查、代码部署、服务管理、错误通知等内容。</p>
+<p>这里先实现最简单的几步：机器管理、代码部署和服务管理，实现通过 jenkins 对 PHP 代码进行拉取和部署、重启服务等。</p>
+<p>具体方式是利用 jenkins 进行自动部署过程的触发，拉取 PHP 代码，然后触发 jenkins 所在机器（虚拟机1）上面的 ansible 的 playbook 任务，连接到本地安装了 PHP 环境的机器（虚拟机2）进行代码推送和服务重启等任务。</p>
+<hr>
+<h2 id="实施过程"><a href="#实施过程" class="headerlink" title="实施过程"></a>实施过程</h2><h3 id="安装-jenkins-插件"><a href="#安装-jenkins-插件" class="headerlink" title="安装 jenkins 插件"></a>安装 jenkins 插件</h3><p>由于整个自动部署过程是从 jenkins 上面进行触发的（这里不选用代码管理库提交代码即通知 jenkins 进行构建的方式），所以我们需要先创建 jenkins 上面的任务，任务会从两个地方拉取代码（PHP 项目代码和部署脚本代码），然后触发部署过程。</p>
+<p>要实现从多个地方拉取代码需要安装以下插件：[Multijob plugin]、[Multiple SCMs plugin]。</p>
+<p>点击首页右侧的 “系统管理” - “管理插件” - “可选插件” 里面进行安装，勾选“安装完成后重启Jenkins(空闲时)”，即可。等待 jenkins 重启完成之后重新登陆 jenkins 即可进行下一步操作。</p>
+<h3 id="代码库登录秘钥管理"><a href="#代码库登录秘钥管理" class="headerlink" title="代码库登录秘钥管理"></a>代码库登录秘钥管理</h3><p>点击首页右侧的 “Credentials” 进去秘钥管理界面。按照下图方式添加一个对应代码库的域名（如github.com）</p>
+<p><img src="/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/domin.png" alt="添加域名" title="添加域名"></p>
+<p>接下来是为代码空间添加登录秘钥了（用来拉取代码的账号名和密码）</p>
+<p><img src="/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/Credentials.png" alt="添加秘钥" title="添加秘钥"></p>
+<h3 id="添加及配置-jenkins-任务"><a href="#添加及配置-jenkins-任务" class="headerlink" title="添加及配置 jenkins 任务"></a>添加及配置 jenkins 任务</h3><p>接下来就是要添加 jenkins 任务了，点击首页右侧的“新建” - “构建一个自由风格的软件项目”</p>
+<p>在“源码管理一栏” - “Multiple SCMs” 去添加要拉取的 PHP代码以及部署脚本代码</p>
+<p>需要注意的是要额外设置一个 “Additional Behaviours”：“Check out to a sub-directory” 来定义拉取后的代码放到什么目录</p>
+<p><img src="/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/mission_settings.png" alt="任务设置" title="任务设置"></p>
+<p>设置完成之后点击保存，然后返回去到任务操作界面，点击“立即构建”如无意外（代码库秘钥不通过、或者虚拟机 1 的 git 没有安装或者异常等）的话，会构建成功，此时点击“工作空间”即能够看到对应的两个代码库的代码已经被正确放到对应的文件夹中</p>
+<p><img src="/2018/01/12/利用虚拟机实现-jenkins-＋-PHP-项目自动部署/workspace.png" alt="工作空间" title="工作空间"></p>
+<h3 id="部署脚本设计"><a href="#部署脚本设计" class="headerlink" title="部署脚本设计"></a>部署脚本设计</h3><p>完成代码的拉取之后，就到了部署脚本的设计环节，部署过程使用 ansible 的话，需要通过 ansible 解决以下问题：</p>
+<ul>
+<li>远程机器的管理</li>
+<li>部署过程的自动化、流程化</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+            <a href="/tags/运维/" rel="tag"># 运维</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/14/RG-Home/" rel="next" title="RG-Home">
+                <i class="fa fa-chevron-left"></i> RG-Home
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png"
+                alt="Runtu" />
+            
+              <p class="site-author-name" itemprop="name">Runtu</p>
+              <p class="site-description motion-element" itemprop="description">闰土就是我啦，这里是我记录日常开发和生活一些博文的地方</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Runtu4378" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境搭建"><span class="nav-number">1.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-安装"><span class="nav-number">1.1.</span> <span class="nav-text">Git 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-环境搭建"><span class="nav-number">1.2.</span> <span class="nav-text">python 环境搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#absible-安装"><span class="nav-number">1.3.</span> <span class="nav-text">absible 安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动部署思路"><span class="nav-number">2.</span> <span class="nav-text">自动部署思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实施过程"><span class="nav-number">3.</span> <span class="nav-text">实施过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-jenkins-插件"><span class="nav-number">3.1.</span> <span class="nav-text">安装 jenkins 插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码库登录秘钥管理"><span class="nav-number">3.2.</span> <span class="nav-text">代码库登录秘钥管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加及配置-jenkins-任务"><span class="nav-number">3.3.</span> <span class="nav-text">添加及配置 jenkins 任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署脚本设计"><span class="nav-number">3.4.</span> <span class="nav-text">部署脚本设计</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Runtu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=58881184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
