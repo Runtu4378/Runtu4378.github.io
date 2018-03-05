@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="前言解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug  bug 描述css-loader 在启动了 modules 的时候，默认会将类名转换为 [hash:base64]，出于开发方便的考虑，我们一般会配置转换规则 local">
+<meta name="description" content="前言解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug">
 <meta name="keywords" content="前端,Webpack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解决css-loader不同文件拥有相同的hash:base64的bug">
 <meta property="og:url" content="http://yoursite.com/2018/03/05/解决css-loader不同文件拥有相同的hash-base64的bug/index.html">
 <meta property="og:site_name" content="闰土的小黑屋">
-<meta property="og:description" content="前言解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug  bug 描述css-loader 在启动了 modules 的时候，默认会将类名转换为 [hash:base64]，出于开发方便的考虑，我们一般会配置转换规则 localIdentName 为 [local]___[hash:base64]，这样同">
+<meta property="og:description" content="前言解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-05T13:31:09.605Z">
+<meta property="og:updated_time" content="2018-03-05T13:35:14.812Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决css-loader不同文件拥有相同的hash:base64的bug">
-<meta name="twitter:description" content="前言解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug  bug 描述css-loader 在启动了 modules 的时候，默认会将类名转换为 [hash:base64]，出于开发方便的考虑，我们一般会配置转换规则 localIdentName 为 [local]___[hash:base64]，这样同">
+<meta name="twitter:description" content="前言解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug">
 
 
 
@@ -343,6 +343,7 @@
         <blockquote>
 <p><strong>前言</strong><br>解决 css-loader 在启用 cssModules 的时候处理相同文件名的文件的时候会产生相同的 [hash:base64] 的 bug</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="bug-描述"><a href="#bug-描述" class="headerlink" title="bug 描述"></a>bug 描述</h2><p>css-loader 在启动了 <code>modules</code> 的时候，默认会将类名转换为 [hash:base64]，出于开发方便的考虑，我们一般会配置转换规则 <code>localIdentName</code> 为 <code>[local]___[hash:base64]</code>，这样同时显示了类名和哈希串，便利了开发也实现了样式隔离。但是会出现一种情况，有时候相同文件名里面的相同样式所生成的哈希串会是一样的，这是为什么呢？</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack 配置</span></span><br><span class="line">&#123;</span><br><span class="line">  test: <span class="regexp">/\.less$/</span>,</span><br><span class="line">  include: <span class="string">'src'</span>,</span><br><span class="line">  use: [</span><br><span class="line">    &#123;</span><br><span class="line">      loader: <span class="string">'style-loader'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      loader: <span class="string">'css-loader'</span>,</span><br><span class="line">      options: &#123;</span><br><span class="line">        modules: <span class="literal">true</span>,</span><br><span class="line">        localIdentName: <span class="string">'[local]___[hash:base64]'</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      loader: <span class="string">'less-loader'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /page1 下面的文件以及样式</span></span><br><span class="line">index.less -&gt; .main &#123;&#125;</span><br><span class="line"><span class="comment">// /page2 下面的文件以及样式</span></span><br><span class="line">index.less -&gt; .main &#123;&#125;</span><br></pre></td></tr></table></figure>
