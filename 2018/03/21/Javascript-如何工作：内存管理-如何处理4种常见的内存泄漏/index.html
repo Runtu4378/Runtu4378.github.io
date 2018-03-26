@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://odfilk47l.bkt.clouddn.com/sword.ico?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言翻译自How JavaScript works: memory management + how to handle 4 common memory leaks">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript 如何工作：内存管理 + 如何处理4种常见的内存泄漏">
+<meta property="og:url" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/index.html">
+<meta property="og:site_name" content="闰土的小黑屋">
+<meta property="og:description" content="前言翻译自How JavaScript works: memory management + how to handle 4 common memory leaks">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_5aBou4onl1B8xlgwoGTDOg.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_GF3p99CQPZkX3UkgyVKSHw.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_WVtok3BV0NgU95mpxk9CNg.gif">
+<meta property="og:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_FbbOG9mcqWZtNajjDO6SaA.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_0B-dAUOH7NrcCDP6GhKHQw.jpeg">
+<meta property="og:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_kEQmoMuNBDfZKNSBh0tvRA.png">
+<meta property="og:updated_time" content="2018-03-23T09:59:41.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript 如何工作：内存管理 + 如何处理4种常见的内存泄漏">
+<meta name="twitter:description" content="前言翻译自How JavaScript works: memory management + how to handle 4 common memory leaks">
+<meta name="twitter:image" content="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_5aBou4onl1B8xlgwoGTDOg.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/"/>
+
+
+
+
+
+  <title>Javascript 如何工作：内存管理 + 如何处理4种常见的内存泄漏 | 闰土的小黑屋</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">闰土的小黑屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Runtu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="闰土的小黑屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Javascript 如何工作：内存管理 + 如何处理4种常见的内存泄漏</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T18:04:21+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><strong>前言</strong><br>翻译自<a href="https://blog.sessionstack.com/how-javascript-works-memory-management-how-to-handle-4-common-memory-leaks-3f28b94cfbec" target="_blank" rel="noopener">How JavaScript works: memory management + how to handle 4 common memory leaks</a></p>
+</blockquote>
+<a id="more"></a>
+<p>几个星期前，我们开展了一系列针对深入研究 Javascript 和它是如何工作的：我们认为通过了解 Javascript 的构建模块和它们是如何在一起运行的话，你就可以编写更好的代码和程序。</p>
+<p>这个系列的第一篇文章是关注于提供 <a href="https://blog.sessionstack.com/how-does-javascript-actually-work-part-1-b0bacc073cf" target="_blank" rel="noopener">引擎、运行时机制（runtime）、调用堆栈的概述</a>，第二篇文章仔细研究了 Google 的 V8 引擎的内部实现，<a href="https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e" target="_blank" rel="noopener">V8 引擎内部实现和如何编写更好的代码的 5 条 tips</a></p>
+<p>在这第三篇文章里，我们会讨论更重要的问题以至于越来越多的程序员忽视这个问题——内存管理，因为我们日常使用的编程语言正变得越来越成熟和复杂。我们同样会提供几种方法来解决 Javascript 中的内存泄漏，这是我们在开发 <a href="https://www.sessionstack.com/?utm_source=medium&amp;utm_medium=blog&amp;utm_content=Post-3-v8-intro" target="_blank" rel="noopener">SessionStack</a> 中所遵循的，这能令 SessionStack 不会发生内存泄漏或者在我们所继承的网页应用中导致内存消耗增加。</p>
+<h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>比如 C 语言这样的编程语言，会提供底层的内存管理函数，比如 <code>malloc()</code> 和 <code>free()</code>。这些函数能够让开发者明确的从系统中分配和释放内存。</p>
+<p>对比之下，Javascript 在目标（对象，字符等）被创建时分配，并且“自动”的在它们不再被使用的时候释放内存，这个过程称为垃圾回收。这看似“自动”的释放资源的性质带来了混乱，给 Javascript（或者其他高级语言）的开发者带来错误的印象——他们可以不考虑内存管理，这错的离谱。</p>
+<p>即使使用高级语言进行开发，开发者都应该拥有内存管理的认识（至少是最基本的理解）。有时他们提出一些内存管理方面的问题（例如是 Bug 或者是垃圾回收器的实现限制之类的）当他们需要正确的理解和处理内存管理问题（或者是为了找到一种最低成本或者最少代码债务的正确方式来处理它）。</p>
+<h2 id="内存的生命周期"><a href="#内存的生命周期" class="headerlink" title="内存的生命周期"></a>内存的生命周期</h2><p>无论你使用什么开发语言，内存的生命周期基本上都是一样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分配内存 -&gt; 使用内存 -&gt; 释放内存</span><br></pre></td></tr></table></figure>
+<p>下面是关于每个阶段发生了什么的概述：</p>
+<ul>
+<li><strong>分配内存</strong>——内存是由操作系统分配给你的程序来使用的。在低级语言（如C）中，这是一项开发者需要处理的明确操作。然而在高级语言为了照顾开发者，它会自动处理这件事。</li>
+<li><strong>使用内存</strong>——就是你的正在使用刚刚系统为你分配的内存的时候。当你在使用代码中定义的变量的时候，实际执行的是变量对应的内存的读写操作。</li>
+<li><strong>释放内存</strong>——这时候你应该释放那些你不需要的内存来解除它们的占用以至于这些内存能够被复用。跟分配内存相似的是，释放内存在低级语言中也是一项明确的操作。</li>
+</ul>
+<p>想快速获得调用堆栈和内存堆的概念概括的话，可以阅读我们的 <a href="https://blog.sessionstack.com/how-does-javascript-actually-work-part-1-b0bacc073cf" target="_blank" rel="noopener">第一篇文章</a></p>
+<h2 id="什么是内存？"><a href="#什么是内存？" class="headerlink" title="什么是内存？"></a>什么是内存？</h2><p>在直接跳跃到讲 Javascript 的内存之前，我们会简要的讨论一下内存一般来说指的是什么，和它是如何运作的。</p>
+<p>在硬件层级，计算机内存是由大量的触发器(<a href="https://en.wikipedia.org/wiki/Flip-flop_%28electronics%29" target="_blank" rel="noopener">flip flops</a>)组成的，每个触发器包含若干的晶体管并且能够存储一比特(1 bit)的数据。每个触发器都可以被一个唯一的识别符作为寻址依据，所以我们才能读写它们。所以从概念上我们可以把计算机的所有内存抽象为一个超长的由比特（bits）组成的数组，我们可以在这数组上进行读写操作。</p>
+<p>作为人类，我们没有概念也不擅长在比特维度上进行计算，我们将它聚合成更高一级的维度——能够用来保存数字的字节（8 比特组成 1 字节）在字节之上是单词（有些单词需要16字节，有些需要32位字节）。</p>
+<p>这些内存上面保存了很多东西：</p>
+<p>1.所有程序所使用到的变量或者是其他数据。<br>2.程序的代码，包括操作系统的。</p>
+<p>编译器和操作系统负责了大部分的内存管理工作，但我们建议你还是需要了解一下在底层发生了些什么。</p>
+<p>当你编译你的代码的时候，编译器会检查你所声明的数据类型并事前计算你需要使用多少内存。程序所需被分配的内存数量被称为堆栈空间。在堆栈空间中需要添加被函数被调用到的变量的时候，它们会被添加到已经存在的内存的最上面，当它们被释放的时候，遵循 LIFO 原则（Last In First Out 后进先出），例如下面的运算：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n;  <span class="comment">// 4字节</span></span><br><span class="line"><span class="keyword">int</span> x[<span class="number">4</span>]; <span class="comment">// 长度为4的数组，每个元素4字节</span></span><br><span class="line"><span class="keyword">double</span> m; <span class="comment">// 8字节</span></span><br></pre></td></tr></table></figure>
+<p>编译器可以马上计算出代码需要：<br>4 + 4 × 4 + 8 = 28 bytes 的内存</p>
+<blockquote>
+<p>这是按照现在的 integers 和 doubles 的尺寸规定所计算出的结果，在大概 20 年前，integers 一般是 2 字节的，而 double 是 4 字节的。你的代码是不需要依赖于现在的基本数据类型的尺寸规定的。</p>
+</blockquote>
+<p>编译器会插入与操作系统进行相互作用的代码，并请求必要数量的堆栈来保存你的变量。</p>
+<p>在上面的例子，编译器知道每一个变量在内存中的地址。事实上，当我们写入变量 <code>n</code> 的时候，在内部会被翻译为比如<code>内存地址 4127963</code>之类的内存地址。</p>
+<p>注意当我们尝试去访问 <code>x[4]</code> 的时候，我们会访问到一部分分配到 <code>m</code> 中的数据内容。这是因为我们访问了一个不存在数组中的数据————在数组的最后一个元素 <code>x[3]</code> 后面 4 bytes 的 <code>x[4]</code> 地址，这会访问到（或者写覆盖）到部分 <code>m</code> 的 bits，这会给后面的程序运行带来一些不可预知的结果。</p>
+<p><img src="/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_5aBou4onl1B8xlgwoGTDOg.png" alt="内存分布示意图" title="内存分布示意图"></p>
+<p>当函数调用另一个函数的时候，每个函数都会在堆栈中创建属于他们的块。用来保存它们的局部变量，同时有一个程序计数器，记录它在执行时的位置。</p>
+<h2 id="动态分配"><a href="#动态分配" class="headerlink" title="动态分配"></a>动态分配</h2><p>不幸的是，当我们不知道在编译时一个变量需要分配多少内存的时候，事情看上去并非这么简单。比如我们想要进下下面这样的操作的时候：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n = readInput(); <span class="comment">// 读取用户输入</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建包括 n 的元素的数组</span></span><br></pre></td></tr></table></figure>
+<p>在这种情况下，编译器并不知道要为 <code>n</code> 分配多少内存因为这取决于运行时用户输入的值。</p>
+<p>因此无法从堆栈为这个变量分配空间，所以我们的程序需要在运行的时候向操作系统请求正确的内存空间。这些空间是从系统的<strong>堆空间</strong>中分配出来的。静态分配和动态分配这两种内存的区别总结基本总结在下面的表格中：</p>
+<table>
+<thead>
+<tr>
+<th>静态分配</th>
+<th>动态分配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- 编译时要分配的尺寸必须是<strong>已知的</strong><br>- 编译的时候执行<br>- 从栈（stack）中分配<br>- FIFO（First in，Last out）</td>
+<td>- 编译时要分配的尺寸必须是<strong>未知的</strong><br>- 运行的时候执行<br>- 从堆（heap）中分配<br>- 没有特殊的分配方式</td>
+</tr>
+</tbody>
+</table>
+<p>想要全面了解如何动态分配内存，我们需要花多点时间在<strong>指针</strong>上面，这会稍微偏离我们这篇文章的主题。如果你想要学习指针相关的知识的话，可以在评论里面反映，我们会在将来的文章中增加关于指针的知识。</p>
+<h2 id="Javascript-中的内存分配"><a href="#Javascript-中的内存分配" class="headerlink" title="Javascript 中的内存分配"></a>Javascript 中的内存分配</h2><p>现在我们会解释 Javascript 如何执行第一步（分配内存）。</p>
+<p>Javascript 减轻了开发者内存分配的责任——Javascript 自己完成变量分配，伴随着变量声明。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> n = <span class="number">374</span>; <span class="comment">// 为数字分配内存</span></span><br><span class="line"><span class="keyword">var</span> S = <span class="string">'sessionstack'</span>; <span class="comment">// 为字符分配内存</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="literal">null</span>,</span><br><span class="line">&#125;; <span class="comment">// 为对象及其包含的值分配内存</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>, <span class="literal">null</span>, <span class="string">'str'</span>]; <span class="comment">// （类似对象）为数组及其包含的值分配内存</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a + <span class="number">3</span>;</span><br><span class="line">&#125; <span class="comment">// 分配函数空间（能被调用的对象）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数表达式同样被视为对象进行内存分配</span></span><br><span class="line">someElement.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  someElement.style.backgroundColor = <span class="string">'blue'</span>;</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>一些调用回调为对象的变量同样也会进行分配：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> d = <span class="keyword">new</span> Data(); <span class="comment">// 分配 Date 对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> e = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>); <span class="comment">// 分配 DOM 元素</span></span><br></pre></td></tr></table></figure>
+<p>函数可以分配为新值或者新对象:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s1 = <span class="string">'sessionstack'</span>;</span><br><span class="line"><span class="keyword">var</span> s2 = s1.substr(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// s2 是一个新字符串</span></span><br><span class="line"><span class="comment">// 因为字符串是不会变化的</span></span><br><span class="line"><span class="comment">// Javascript 可能不会分配新的内存</span></span><br><span class="line"><span class="comment">// 只保存 [0, 3] 的范围</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a1 = [<span class="string">'str1'</span>, <span class="string">'str2'</span>];</span><br><span class="line"><span class="keyword">var</span> a2 = [<span class="string">'str3'</span>, <span class="string">'str4'</span>];</span><br><span class="line"><span class="keyword">var</span> a3 = al.concat(a2);</span><br><span class="line"><span class="comment">// 由四个元素组成的新数组</span></span><br><span class="line"><span class="comment">// 由 a1 和 a2 的元素所组成</span></span><br></pre></td></tr></table></figure>
+<h2 id="Javascript-中的内存使用"><a href="#Javascript-中的内存使用" class="headerlink" title="Javascript 中的内存使用"></a>Javascript 中的内存使用</h2><p>Javascript 中通过读取和写入来使用已分配的内存。</p>
+<p>它发生在读取或者是写入变量的时候，或者是某些对象的属性乃至你为函数传入的变量。</p>
+<h2 id="释放那些不再被需要的内存"><a href="#释放那些不再被需要的内存" class="headerlink" title="释放那些不再被需要的内存"></a>释放那些不再被需要的内存</h2><p>大部分关于内存管理的问题是在这个阶段出现的。</p>
+<p>最艰难的任务是如何分辨某个已分配内存不会再被使用。这通常需要开发者在代码中明确提出某部分内存不会再使用而可以被释放，</p>
+<p>高等语言会内嵌一种名为<strong>垃圾回收器</strong>的程序，他的任务是追踪内存分配而且判断这些已分配的内存在什么时候不会再被使用，从而释放这段内存。</p>
+<p>不幸的是，这个过程只能得出一个近似值，因为判断某部分内存在什么时候被需要这个问题是不可解的（无法通过一个算法来解决）</p>
+<p>大部分垃圾回收器通过手机那些不会再被访问到的内存来达到目的。例如，所有指向此处的变量都超出了使用范围。然而，这只是可被回收的内存空间的一个近似值。因为在任何时候，一个内存地址都可能还有变量仍然指向此处，但这些变量可能不会再被范围而已。</p>
+<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>由于寻找某个变量空间“不再被需要”的问题是不可判定的。垃圾回收是对一般情况实现的一种解决方案。这一章节会解释一些理解垃圾回收的算法和局限性所必需的的知识。</p>
+<h2 id="内存引用"><a href="#内存引用" class="headerlink" title="内存引用"></a>内存引用</h2><p>垃圾回收的算法所依赖的主要概念之一是<strong>内存引用</strong></p>
+<p>在内存管理中，如果一个对象访问另个一对象，则称前者引用另一个对象（可以是显式的或者是隐式的）。举个例子，一个 Javascript 对象会引用它的 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">原型属性</a>（隐式引用）和它的属性的值（显式引用）。</p>
+<p>在我们讨论的这些情况下，“对象”的含义从传统意义上的“Javascript 对象”扩展到更广泛的概念上，包括函数领域乃至<strong>词法范围</strong>。</p>
+<blockquote>
+<p>词法范围定义了如何在嵌套函数中解析变量名称：即使父函数已返回，内部函数也包含父函数的作用域。</p>
+</blockquote>
+<h2 id="引用计数和垃圾回收"><a href="#引用计数和垃圾回收" class="headerlink" title="引用计数和垃圾回收"></a>引用计数和垃圾回收</h2><p>这是最简单的垃圾回收算法。一个对象是根据它的“可回收性”来决定是否要被回收——如果没有任何单位引用它。</p>
+<p>分析一下下面的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o1 = &#123;</span><br><span class="line">  o2: &#123;</span><br><span class="line">    x: <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 两个对象被创建</span></span><br><span class="line"><span class="comment">// o2 被 o1 在它的第一个属性被引用</span></span><br><span class="line"><span class="comment">// 没有任何垃圾可以被回收</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o3 = o1; <span class="comment">// o3 是第二个对 o1 所指向的对象进行引用的变量</span></span><br><span class="line"></span><br><span class="line">o1 = <span class="number">1</span>; <span class="comment">// 现在，原来被 o1 所引用的对象只剩下了一个引用，也就是上面的 o3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o4 = o3.o2; <span class="comment">// 引用对象的 o2 属性，这个对象现在有 2 个引用，一个作为属性，一个被变量所引用</span></span><br><span class="line"></span><br><span class="line">o3 = <span class="string">'374'</span>; <span class="comment">// 原来被 o3 所引用的那个对象现在被引用数为 0，它现在可以被清理掉了，即使如此，它的属性 o2 仍然被 o4 所引用，所以这个对象现在还不能被清理。</span></span><br><span class="line"></span><br><span class="line">o4 = <span class="literal">null</span>; <span class="comment">// 带有 o2 这个对象为属性的对象，现在被引用数为 0，这可以被清理了。</span></span><br></pre></td></tr></table></figure>
+<h2 id="循环带来的问题"><a href="#循环带来的问题" class="headerlink" title="循环带来的问题"></a>循环带来的问题</h2><p>在面临循环的时候，垃圾回收算法可能会面临局限。在下面的例子中，两个对象先后创建，并且相互引用，形成了一种循环。它们会在函数调用完毕之后其实已经离开作用域，是无用且可被释放的变量。然而，垃圾回收算法中的引用计数器这时候判断它们至少还仍有一个引用，两者都不能被释放。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> o1 = &#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> o2 = &#123;&#125;;</span><br><span class="line">  o1.p = o2;  <span class="comment">// o1 引用 o2</span></span><br><span class="line">  o2.p = o1;  <span class="comment">// o2 引用 o1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f();</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_GF3p99CQPZkX3UkgyVKSHw.png" alt="引用关系图" title="应用关系图"></p>
+<h2 id="标记和扫描算法"><a href="#标记和扫描算法" class="headerlink" title="标记和扫描算法"></a>标记和扫描算法</h2><p>为了判断对象是否被需要，这个算法判断对象是否可达。</p>
+<p>标记和扫描算法一般经历以下三个步骤：</p>
+<p>1.根：通常来说，根是那些定义为全局变量并被引用的变量。举个例子在 Javascript 中，能被视为根变量的是 <code>window</code> 对象。类似的在 NodeJS 中的根变量为 <code>global</code>。垃圾回收器会建立一个列表来记录所有根变量。<br>2.算法随后会扫描所有根变量以及它们的属性，将它们标记为激活状态（意味着它们不是垃圾）。任何在根级别但不被访问到的变量将被标记为垃圾。<br>3.最后，垃圾回收器将所有标记为垃圾（没有被标记为激活状态的变量）的变量空间释放返回给系统。</p>
+<p><img src="/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_WVtok3BV0NgU95mpxk9CNg.gif" alt="扫描过程示意图" title="扫描过程示意图"></p>
+<p>这个算法相比于前一个更好，因为判断原因由“对象为零引用”推广到这个对象不能被访问。明显的一个反例是循环引用的情况。</p>
+<p>截止到 2012 年，所有的现在浏览器都装载了具备标记和扫描算法的垃圾回收器。在过去几年里在 Javascript 领域里面关于垃圾回收（代码、增量、并发、并行垃圾收集）的改进都是对该算法的改进（标记扫描算法），但没有改进垃圾收集算法本身，也没有该变判断一个对象是否可达这个目标。</p>
+<p>在这篇文章中，你可以跟进有关垃圾回收的更详细信息，也包括标记和扫描算法以及其优化。</p>
+<h2 id="循环不再是问题"><a href="#循环不再是问题" class="headerlink" title="循环不再是问题"></a>循环不再是问题</h2><p>在上面最近一个例子中，在函数调用完之后，两个互相引用的对象不被根级别的任何对象所引用。所以，它们会被垃圾回收器视为不可达的对象。</p>
+<p><img src="/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_FbbOG9mcqWZtNajjDO6SaA.png" alt="扫描关系示意图" title="扫描关系示意图"></p>
+<p>所以即使这两个对象还在相互引用，它们相对于根是不可达的。</p>
+<h2 id="垃圾收集器的直观行为"><a href="#垃圾收集器的直观行为" class="headerlink" title="垃圾收集器的直观行为"></a>垃圾收集器的直观行为</h2><p>虽然垃圾收集器很方便，但它们也是有由于设计目的所限制的局限之处。其中之一是“非确定性”，换言之，垃圾收集器是不可预料的。你无法告诉它什么时候执行垃圾回收。这意味着有时候程序会占用比它实际所需要的更多的内存。在这种情况下，尤其是那些对流畅性要求很高的程序，短暂停会尤其明显。尽管非决定论意味着人们无法确定何时进行收集，大多数垃圾收集实现共享在分配过程中执行收集过程的通用模式。如果没有分配动作需要执行，大部分垃圾收集器会保持空闲状态，同时考虑以下情况：</p>
+<p>1.一大组分配被执行。</p>
+<p>2.大部分这些元素（或者是全部）被标记为不可达（假设我们将这些变量链接到内存地址的引用标记为 null）</p>
+<p>3.没有进一步的分配被执行。</p>
+<p>在这种情况下，大部分垃圾收集器不会再进行深一步的内存收集。换言之，尽管可能还存在可收集的不可达的引用，不过收集器并不会发现这些引用。这些并非内存泄漏但仍然导致了高于预期的内存占用的表现。</p>
+<h2 id="什么是内存泄漏"><a href="#什么是内存泄漏" class="headerlink" title="什么是内存泄漏"></a>什么是内存泄漏</h2><p>内存泄漏指的是某个应用曾经使用过但在之后不会被使用到的一段内存空间，这段内存空间没有被返回给系统或者是可用内存池。</p>
+<p><img src="/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_0B-dAUOH7NrcCDP6GhKHQw.jpeg" alt=""></p>
+<p>编程语言支持以不同的方式来进行内存管理。然后，某段内存是否被占用是一个<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management#Release_when_the_memory_is_not_needed_anymore" target="_blank" rel="noopener">不可判定的问题</a>。换言之，只有开发者能够明确说明某个变量所占用的内存空间是否能够释放。</p>
+<p>某些编程语言提供了可帮助开发人员执行此操作的功能。其他开发语言则希望开发人员能够完全清楚一段内存何时未被使用。维基百科有关<a href="https://en.wikipedia.org/wiki/Manual_memory_management" target="_blank" rel="noopener">手动</a>和<a href="https://en.wikipedia.org/wiki/Manual_memory_management" target="_blank" rel="noopener">自动</a>内存管理的好文章。</p>
+<h2 id="Javascript-常见的四种内存泄漏"><a href="#Javascript-常见的四种内存泄漏" class="headerlink" title="Javascript 常见的四种内存泄漏"></a>Javascript 常见的四种内存泄漏</h2><h3 id="1-全局变量"><a href="#1-全局变量" class="headerlink" title="1.全局变量"></a>1.全局变量</h3><p>Javascript 以一种有趣的方式来对待未声明的变量：当一个未声明的变量被引用时，这个变量会在全局对象中被创建。在浏览器中，全局对象是 <code>window</code>，这意味着：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  bar = <span class="string">'some text'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相当于：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">window</span>.bar = <span class="string">'some text'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>bar</code> 变量的预期作用是一个在 <code>foo</code> 函数里面使用的函数，不过却导致了一个冗余的全局变量被定义了，这只是由于你忘记了使用 <code>var</code> 来进行变量的声明。上面这种情况带来的后果可能不那么糟糕，但你应该能想象到比这糟糕得多的情况。</p>
+<p>你也可以通过使用 <code>this</code> 来意外的创建一个全局变量：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.var1 = <span class="string">'潜在的意外全局性变量'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo 被调用，此时的 this 指向的是全局变量 window 而不是 undefined</span></span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>你可以通过在 Javascript 的文件开头添加 <code>use strict;</code> 来避免这种情况发生，这能够将 Javascript 转换到更严格的编译模式，防止意外的全局变量的创建。</p>
+</blockquote>
+<p>变量意外全局化当然是个问题，然而，更多的时候，你的代码会被显式定义的全局变量污染，这些变量根据定义不能被垃圾收集器所收集。特别要注意那些用来存储临时变量和处理大量信息的全局变量。如果你必须这么做的话你大可以使用全局变量来存储这些数据，不过记得要在使用完这些数据之后<strong>将它们分配为空或者是重新分配它们</strong>。</p>
+<h3 id="2-被遗忘的定时器或者是回调"><a href="#2-被遗忘的定时器或者是回调" class="headerlink" title="2.被遗忘的定时器或者是回调"></a>2.被遗忘的定时器或者是回调</h3><p>我们以经常在 Javascript 中使用到的 <code>setInterval</code> 为例。</p>
+<p>提供观察者和接受回调的其他工具的库通常会确保所有对回调的引用在其实例无法访问时变得无法访问。看看下面这个不怎么罕见的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> serverData = loadData();</span><br><span class="line">setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> renderer = <span class="built_in">document</span>.getElementById(<span class="string">'renderer'</span>);</span><br><span class="line">  <span class="keyword">if</span> (renderer) &#123;</span><br><span class="line">    renderer.innerHTML = <span class="built_in">JSON</span>.stringify(serverData);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="number">5000</span>); <span class="comment">// 每 5 秒会执行一次</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码片段显示了使用引用不再需要的节点或数据的定时器的后果。</p>
+<p><code>renderer</code> 对象可能会在某些点被替换或删除，这会使得间隔处理程序封装的块变得冗余。如果发生这种情况，处理程序及其依赖物都不会被当做垃圾被收集，因为间隔需要先停止（请记住，它仍然处于活动状态）。事实是 <code>serverData</code> 确实被存储了，加载数据的进程也不会被回收。</p>
+<p>在使用观察者模式时，您需要确保你在调用完它们的时候提供一个明确的调用来将其删除（令观察者不再需要，或者该对象将变得无法到达）。</p>
+<p>辛运的是，大部分现代浏览器会帮你完成这个工作：即使您忘记删除侦听器，一旦观察到的对象变得无法访问，它们会自动收集观察者处理程序。低版本的一些浏览器无法处理这些情况。（辣鸡IE6）</p>
+<p>尽管如此，最好的做法是一旦对象变得过时，就移除它的监听器。看下面的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> element = <span class="built_in">document</span>.getElementById(<span class="string">'launch-button'</span>);</span><br><span class="line"><span class="keyword">var</span> counter = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onClick</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  counter += <span class="number">1</span>;</span><br><span class="line">  element.innerHTML = <span class="string">'text'</span> + counter;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">element.addEventListener(<span class="string">'click'</span>, onClick);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其他操作</span></span><br><span class="line"></span><br><span class="line">element.removeEventListener(<span class="string">'click'</span>, onClick);</span><br><span class="line">element.parentNode.removeChild(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 现在，当 element 离开作用域时，即使是在低版本浏览器中，element 和 onClick 都会当做垃圾收集，</span></span><br></pre></td></tr></table></figure>
+<p>在那些可以检测周期并适当地处理监听器的现代浏览器中，你不再需要在节点不可达之前调用 <code>removeEventListener</code>。</p>
+<p>如果你使用的是 <code>jQuery</code> 的 API 的话（其他库或者框架也支持）你也可以在节点过时之前删除侦听器。即使应用程序在较旧的浏览器版本下运行，该库也会确保没有内存泄漏。</p>
+<h3 id="3-闭包"><a href="#3-闭包" class="headerlink" title="3.闭包"></a>3.闭包</h3><p>Javascript 开发的其中一个关键点是闭包：一个可以访问外部（封闭）函数变量的内部函数。由于JavaScript运行时的实现细节，有可能以下列方式泄漏内存：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> originalThing = theThing;</span><br><span class="line">  <span class="keyword">var</span> unused = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (originalThing) <span class="comment">// originalThing 的引用</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'hi'</span>);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  theThing = &#123;</span><br><span class="line">    longStr: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>),</span><br><span class="line">    someMethod: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"message"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">setInterval(replaceThing, <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+<p>当 <code>replaceThing</code> 被调用，<code>theThing</code> 会获得一个由长数组和和一个新闭包（<code>someMethod</code>）组成的对象。然而，<code>originalThing</code> 被变量 <code>unused</code> 所引用的闭包函数所引用了（之前调用的 <code>replaceThing</code> 函数里面的 <code>theThing</code> 变量）。需要记住的是：<strong>一旦在同一个父范围内为闭包创建了闭包范围，范围将被共享。</strong></p>
+<p>在这种情况下，为 <code>someMethod</code> 创建的闭包范围会和 <code>unused</code> 的闭包范围共享。<code>unused</code> 拥有对 <code>originalThing</code> 的引用。即使 <code>unused</code> 从未被调用过，<code>someMethod</code> 会通过 <code>theThing</code> 在 <code>replaceThing</code> 以外的空间被调用（全局空间的某处）。而且当 <code>someMethod</code> 和 <code>unused</code> 共享闭包范围的时候，<code>originalThing</code> 引用着 <code>unused</code> 使它保持激活状态（两个关闭包之间的整个共享闭包范围）。这阻止了 <code>unused</code> 被收集。</p>
+<p>在上面的例子中，为 <code>someMethod</code> 创建的闭包空间和 <code>unused</code> 共享了，而 <code>unused</code> 引用了 <code>originalThing</code>。<code>someMethod</code> 可以通过 <code>theThing</code> 在 <code>replaceThing</code> 作用域之外被调用，即使事实上 <code>unused</code> 从未被调用过。事实上由于作用域共享，在 <code>someMethod</code> 被调用时，<code>unused</code> 也进行了 <code>originalThing</code> 的引用。</p>
+<p>所有这些都可能导致相当大的内存泄漏。当上面的代码片段一遍又一遍地运行时，您可能会发现内存使用量激增。当垃圾收集器运行时，其大小不会缩小。一个闭包的关联链表被创建（在这个例子中根变量是 <code>theThing</code> 变量），并且每个闭包范围都会间接引用大数组。</p>
+<p>Meteor团队发现了这个问题，他们有一篇很好的<a href="https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156" target="_blank" rel="noopener">文章</a>，详细描述了这个问题。</p>
+<h3 id="4-DOM-以外引用"><a href="#4-DOM-以外引用" class="headerlink" title="4.DOM 以外引用"></a>4.DOM 以外引用</h3><p>有些情况下开发人员在数据结构中存储 DOM 节点。假设你想快速更新表格中几行的内容。如果您在字典或数组中存储对每个DOM行的引用，将有两个对同一个 DOM 元素的引用：一个在 DOM 树中，另一个在字典中。如果你决定移除这些行，你需要记住使两个引用无法访问。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> elements = &#123;</span><br><span class="line">  button: <span class="built_in">document</span>.getElementById(<span class="string">'button'</span>),</span><br><span class="line">  image: <span class="built_in">document</span>.getElementById(<span class="string">'image'</span>)</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">doStuff</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  elements.image.src = <span class="string">'http://example.com/image_name.png'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeImage</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// image 是 body 下直属的子元素</span></span><br><span class="line">  <span class="built_in">document</span>.body.removeChild(<span class="built_in">document</span>.getElementById(<span class="string">'image'</span>));</span><br><span class="line">  <span class="comment">// 在这时候，在全局变量 elements 中依然保存着对 #button 的引用，换言之，这个 button 元素依然存在于内存中不能被垃圾回收掉</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在涉及DOM树内的内部节点或叶节点时，还有一个额外考虑因素需要考虑。如果您在代码中保留对表格单元格（<code>&lt;td&gt;</code>标记）的引用，然后你决定从 DOM 中删除该表格并保留对该特定单元格的引用，你可能会发生一个严重的内存泄漏。你可能会认为垃圾回收器会释放除该单元格外的所有内容。然而，情况并非如此。由于单元格是表格的子节点，并且子节点保持对其父母的引用，<strong>对表格单元格的这种单一引用会将整个表格保留在内存中。</strong></p>
+<p>我们在 SessionStack 尝试遵循这些最佳实践来编写正确处理内存分配的代码，原因如下：</p>
+<p>当您将 SessionStack 集成到您的生产Web应用程序，它开始记录一切：所有 DOM 更改，用户交互，JavaScript 异常，堆栈跟踪，网络请求失败，调试消息等。通过 SessionStack，您可以将发生的问题作为视频重播，并查看发生在用户身上的一切。所有这些都必须在您的网络应用程序没有额外性能影响的情况下进行。</p>
+<p>由于用户可以重新加载页面或导航您的应用，所有观察员，拦截器，变量分配等。都必须正确处理，所以 SessionStack 不应该导致任何内存泄漏，或者不会增加我们集成的 Web 应用程序的内存消耗。</p>
+<p>有一个免费的计划，所以你可以<a href="https://www.sessionstack.com/?utm_source=medium&amp;utm_medium=blog&amp;utm_content=Post-3-v8-getStarted" target="_blank" rel="noopener">尝试一下</a>。</p>
+<p><img src="/2018/03/21/Javascript-如何工作：内存管理-如何处理4种常见的内存泄漏/1_kEQmoMuNBDfZKNSBh0tvRA.png" alt=""></p>
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><ul>
+<li><a href="http://www-bcf.usc.edu/~dkempe/CS104/08-29.pdf" target="_blank" rel="noopener">http://www-bcf.usc.edu/~dkempe/CS104/08-29.pdf</a></li>
+<li><a href="https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156" target="_blank" rel="noopener">https://blog.meteor.com/an-interesting-kind-of-javascript-memory-leak-8b47d2e7f156</a></li>
+<li><a href="http://www.nodesimplified.com/2017/08/javascript-memory-management-and.html" target="_blank" rel="noopener">http://www.nodesimplified.com/2017/08/javascript-memory-management-and.html</a></li>
+<li><a href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/" target="_blank" rel="noopener">https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/05/解决css-loader不同文件拥有相同的hash-base64的bug/" rel="next" title="解决css-loader不同文件拥有相同的hash:base64的bug">
+                <i class="fa fa-chevron-left"></i> 解决css-loader不同文件拥有相同的hash:base64的bug
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://odfilk47l.bkt.clouddn.com/image/jpg/322691848423487165.png"
+                alt="Runtu" />
+            
+              <p class="site-author-name" itemprop="name">Runtu</p>
+              <p class="site-description motion-element" itemprop="description">闰土就是我啦，这里是我记录日常开发和生活一些博文的地方</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Runtu4378" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概括"><span class="nav-number">1.</span> <span class="nav-text">概括</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存的生命周期"><span class="nav-number">2.</span> <span class="nav-text">内存的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是内存？"><span class="nav-number">3.</span> <span class="nav-text">什么是内存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态分配"><span class="nav-number">4.</span> <span class="nav-text">动态分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Javascript-中的内存分配"><span class="nav-number">5.</span> <span class="nav-text">Javascript 中的内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Javascript-中的内存使用"><span class="nav-number">6.</span> <span class="nav-text">Javascript 中的内存使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#释放那些不再被需要的内存"><span class="nav-number">7.</span> <span class="nav-text">释放那些不再被需要的内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收"><span class="nav-number">8.</span> <span class="nav-text">垃圾回收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存引用"><span class="nav-number">9.</span> <span class="nav-text">内存引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用计数和垃圾回收"><span class="nav-number">10.</span> <span class="nav-text">引用计数和垃圾回收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环带来的问题"><span class="nav-number">11.</span> <span class="nav-text">循环带来的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标记和扫描算法"><span class="nav-number">12.</span> <span class="nav-text">标记和扫描算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环不再是问题"><span class="nav-number">13.</span> <span class="nav-text">循环不再是问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集器的直观行为"><span class="nav-number">14.</span> <span class="nav-text">垃圾收集器的直观行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是内存泄漏"><span class="nav-number">15.</span> <span class="nav-text">什么是内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Javascript-常见的四种内存泄漏"><span class="nav-number">16.</span> <span class="nav-text">Javascript 常见的四种内存泄漏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-全局变量"><span class="nav-number">16.1.</span> <span class="nav-text">1.全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-被遗忘的定时器或者是回调"><span class="nav-number">16.2.</span> <span class="nav-text">2.被遗忘的定时器或者是回调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-闭包"><span class="nav-number">16.3.</span> <span class="nav-text">3.闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-DOM-以外引用"><span class="nav-number">16.4.</span> <span class="nav-text">4.DOM 以外引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源"><span class="nav-number">17.</span> <span class="nav-text">资源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Runtu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=58881184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
